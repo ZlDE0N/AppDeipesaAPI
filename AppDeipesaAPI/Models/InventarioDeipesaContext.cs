@@ -16,6 +16,7 @@ namespace AppDeipesaAPI.Models
         {
         }
 
+        public virtual DbSet<Ciudad> Ciudades => Set<Ciudad>();
         public virtual DbSet<Almacen> Almacens { get; set; } = null!;
         public virtual DbSet<Cliente> Clientes { get; set; } = null!;
         public virtual DbSet<DatosCliente> DatosClientes { get; set; } = null!;
