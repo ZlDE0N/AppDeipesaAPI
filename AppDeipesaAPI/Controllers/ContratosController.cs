@@ -24,10 +24,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contrato>>> GetContratos()
         {
-          if (_context.Contratos == null)
-          {
-              return NotFound();
-          }
+            if (_context.Contratos == null)
+            {
+                return NotFound();
+            }
             return await _context.Contratos.ToListAsync();
         }
 
@@ -35,10 +35,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Contrato>> GetContrato(long id)
         {
-          if (_context.Contratos == null)
-          {
-              return NotFound();
-          }
+            if (_context.Contratos == null)
+            {
+                return NotFound();
+            }
             var contrato = await _context.Contratos.FindAsync(id);
 
             if (contrato == null)
@@ -85,10 +85,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Contrato>> PostContrato(Contrato contrato)
         {
-          if (_context.Contratos == null)
-          {
-              return Problem("Entity set 'InventarioDeipesaContext.Contratos'  is null.");
-          }
+            if (_context.Contratos == null)
+            {
+                return Problem("Entity set 'InventarioDeipesaContext.Contratos'  is null.");
+            }
             _context.Contratos.Add(contrato);
             await _context.SaveChangesAsync();
 
@@ -118,6 +118,25 @@ namespace AppDeipesaAPI.Controllers
         private bool ContratoExists(long id)
         {
             return (_context.Contratos?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [HttpGet("by-city/{cityId}")]
+        public async Task<ActionResult<IEnumerable<Contrato>>> GetByCity(long cityId)
+        {
+            var result = await _context.Contratos
+                .Include(c => c.Cliente)
+                    .ThenInclude(cl => cl!.Ciudad)
+                .Where(c => c.Cliente!.Ciudad!.Id == cityId)
+                .AsSplitQuery()
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
         }
     }
 }
