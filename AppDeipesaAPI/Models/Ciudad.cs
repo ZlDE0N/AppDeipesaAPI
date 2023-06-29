@@ -12,5 +12,6 @@ namespace AppDeipesaAPI.Models
 
         public ICollection<Proveedor>? Proveedores { get; set; }
         public ICollection<Almacen>? Almacenes { get; set; }
+        public ICollection<Cliente>? Clientes { get; set; }
     }
 }

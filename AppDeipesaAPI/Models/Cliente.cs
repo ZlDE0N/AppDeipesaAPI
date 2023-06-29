@@ -12,6 +12,7 @@ namespace AppDeipesaAPI.Models
         }
 
         public string IdCliente { get; set; } = null!;
+        public long CiudadId { get; set; }
         public string? Cedula { get; set; }
         public string? Nombres { get; set; }
         public string? Apellidos { get; set; }
@@ -21,5 +22,7 @@ namespace AppDeipesaAPI.Models
 
         public virtual ICollection<Factura> Facturas { get; set; }
         public virtual ICollection<Pago> Pagos { get; set; }
+        public virtual Ciudad? Ciudad { get; set; }
+        public virtual ICollection<Contrato>? Contratos { get; set; }
     }
 }
