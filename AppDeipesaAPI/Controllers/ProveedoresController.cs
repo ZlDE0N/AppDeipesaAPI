@@ -24,10 +24,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Proveedor>>> GetProveedors()
         {
-          if (_context.Proveedors == null)
-          {
-              return NotFound();
-          }
+            if (_context.Proveedors == null)
+            {
+                return NotFound();
+            }
             return await _context.Proveedors.ToListAsync();
         }
 
@@ -35,10 +35,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Proveedor>> GetProveedor(string id)
         {
-          if (_context.Proveedors == null)
-          {
-              return NotFound();
-          }
+            if (_context.Proveedors == null)
+            {
+                return NotFound();
+            }
             var proveedor = await _context.Proveedors.FindAsync(id);
 
             if (proveedor == null)
@@ -85,10 +85,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Proveedor>> PostProveedor(Proveedor proveedor)
         {
-          if (_context.Proveedors == null)
-          {
-              return Problem("Entity set 'InventarioDeipesaContext.Proveedors'  is null.");
-          }
+            if (_context.Proveedors == null)
+            {
+                return Problem("Entity set 'InventarioDeipesaContext.Proveedors'  is null.");
+            }
             _context.Proveedors.Add(proveedor);
             try
             {
@@ -132,6 +132,21 @@ namespace AppDeipesaAPI.Controllers
         private bool ProveedorExists(string id)
         {
             return (_context.Proveedors?.Any(e => e.Idproveedor == id)).GetValueOrDefault();
+        }
+
+        [HttpGet("by-city/{cityId}")]
+        public async Task<ActionResult<IEnumerable<Proveedor>>> GetByLocation(int cityId)
+        {
+            var result = await _context.Proveedors
+                .Where(p => p.CiudadId == cityId)
+                .ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
         }
     }
 }
