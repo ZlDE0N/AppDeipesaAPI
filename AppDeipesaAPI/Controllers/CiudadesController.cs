@@ -24,10 +24,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ciudad>>> GetCiudades()
         {
-          if (_context.Ciudades == null)
-          {
-              return NotFound();
-          }
+            if (_context.Ciudades == null)
+            {
+                return NotFound();
+            }
             return await _context.Ciudades.ToListAsync();
         }
 
@@ -35,10 +35,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Ciudad>> GetCiudad(long id)
         {
-          if (_context.Ciudades == null)
-          {
-              return NotFound();
-          }
+            if (_context.Ciudades == null)
+            {
+                return NotFound();
+            }
             var ciudad = await _context.Ciudades.FindAsync(id);
 
             if (ciudad == null)
@@ -85,10 +85,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Ciudad>> PostCiudad(Ciudad ciudad)
         {
-          if (_context.Ciudades == null)
-          {
-              return Problem("Entity set 'InventarioDeipesaContext.Ciudades'  is null.");
-          }
+            if (_context.Ciudades == null)
+            {
+                return Problem("Entity set 'InventarioDeipesaContext.Ciudades'  is null.");
+            }
             _context.Ciudades.Add(ciudad);
             await _context.SaveChangesAsync();
 
@@ -118,6 +118,17 @@ namespace AppDeipesaAPI.Controllers
         private bool CiudadExists(long id)
         {
             return (_context.Ciudades?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [HttpGet("by-name/{name}")]
+        public async Task<ActionResult<Ciudad>> GetByName(string name)
+        {
+            var result = await _context.Ciudades.Where(c => c.Name.Trim().ToLower() == name.Trim().ToLower()).FirstOrDefaultAsync();
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return result;
         }
     }
 }

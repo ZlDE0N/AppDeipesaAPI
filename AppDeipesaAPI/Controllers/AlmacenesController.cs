@@ -134,7 +134,7 @@ namespace AppDeipesaAPI.Controllers
             return (_context.Almacens?.Any(e => e.IdAlmacen == id)).GetValueOrDefault();
         }
 
-        [HttpGet("by-location/{id}")]
+        [HttpGet("by-location/{locationId}")]
         public async Task<ActionResult<Almacen>> GetStorageByLocation(long locationId)
         {
             var result = await _context.Almacens
