@@ -135,7 +135,7 @@ namespace AppDeipesaAPI.Controllers
         }
 
         [HttpGet("by-location/{location}")]
-        public async Task<ActionResult<IEnumerable<Almacen>>> GetStorageByLocation(string location)
+        public async Task<ActionResult<Almacen>> GetStorageByLocation(string location)
         {
             var result = await _context.Almacens
                     .Include(a => a.Inventarios)
@@ -143,7 +143,7 @@ namespace AppDeipesaAPI.Controllers
                     .Where(a => a.Ubicacion != null && a.Ubicacion.ToLower() == location.ToLower())
                     .AsNoTracking()
                     .AsSplitQuery()
-                    .ToListAsync();
+                    .FirstOrDefaultAsync();
 
             if (result == null)
             {
