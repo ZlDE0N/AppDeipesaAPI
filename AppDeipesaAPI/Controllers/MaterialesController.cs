@@ -32,10 +32,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Materiale>>> GetMateriales()
         {
-          if (_context.Materiales == null)
-          {
-              return NotFound();
-          }
+            if (_context.Materiales == null)
+            {
+                return NotFound();
+            }
             return await _context.Materiales.ToListAsync();
         }
 
@@ -43,10 +43,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Materiale>> GetMateriale(string id)
         {
-          if (_context.Materiales == null)
-          {
-              return NotFound();
-          }
+            if (_context.Materiales == null)
+            {
+                return NotFound();
+            }
             var materiale = await _context.Materiales.FindAsync(id);
 
             if (materiale == null)
@@ -93,10 +93,10 @@ namespace AppDeipesaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Materiale>> PostMateriale(Materiale materiale)
         {
-          if (_context.Materiales == null)
-          {
-              return Problem("Entity set 'InventarioDeipesaContext.Materiales'  is null.");
-          }
+            if (_context.Materiales == null)
+            {
+                return Problem("Entity set 'InventarioDeipesaContext.Materiales'  is null.");
+            }
             _context.Materiales.Add(materiale);
             try
             {
