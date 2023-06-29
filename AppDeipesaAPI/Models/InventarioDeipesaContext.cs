@@ -72,10 +72,6 @@ namespace AppDeipesaAPI.Models
                 entity.Property(e => e.Telefono)
                     .HasMaxLength(25)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Ubicacion)
-                    .HasMaxLength(120)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Cliente>(entity =>

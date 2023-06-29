@@ -134,13 +134,13 @@ namespace AppDeipesaAPI.Controllers
             return (_context.Almacens?.Any(e => e.IdAlmacen == id)).GetValueOrDefault();
         }
 
-        [HttpGet("by-location/{location}")]
-        public async Task<ActionResult<Almacen>> GetStorageByLocation(string location)
+        [HttpGet("by-location/{id}")]
+        public async Task<ActionResult<Almacen>> GetStorageByLocation(long locationId)
         {
             var result = await _context.Almacens
                     .Include(a => a.Inventarios)
                         .ThenInclude(i => i.IdMaterialNavigation)
-                    .Where(a => a.Ubicacion != null && a.Ubicacion.ToLower() == location.ToLower())
+                    .Where(a => a.CiudadId == locationId)
                     .AsNoTracking()
                     .AsSplitQuery()
                     .FirstOrDefaultAsync();
