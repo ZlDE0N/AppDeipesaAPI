@@ -11,11 +11,13 @@ namespace AppDeipesaAPI.Models
         }
 
         public string Idproveedor { get; set; } = null!;
+        public long CiudadId { get; set; }
         public string? NombreProveedor { get; set; }
         public string? Direccion { get; set; }
         public string? Telefono { get; set; }
         public string? Correo { get; set; }
 
         public virtual ICollection<OrdenCompra> OrdenCompras { get; set; }
+        public Ciudad? Ciudad { get; set; }
     }
 }

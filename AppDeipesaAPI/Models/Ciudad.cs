@@ -9,5 +9,7 @@ namespace AppDeipesaAPI.Models
     {
         public long Id { get; set; }
         public string Name { get; set; } = null!;
+
+        public ICollection<Proveedor>? Proveedores { get; set; }
     }
 }
