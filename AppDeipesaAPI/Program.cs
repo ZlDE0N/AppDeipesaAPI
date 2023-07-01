@@ -1,7 +1,8 @@
 global using AppDeipesaAPI.Models;
-
 global using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
