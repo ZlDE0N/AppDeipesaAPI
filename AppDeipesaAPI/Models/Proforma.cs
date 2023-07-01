@@ -8,6 +8,7 @@ namespace AppDeipesaAPI.Models
         public long Id { get; set; }
         public long CiudadId { get; set; }
         public string Nombre { get; set; } = null!;
+        public string URL { get; set; } = null!;
         public DateTime Fecha { get; set; }
         public Ciudad? Ciudad { get; set; }
     }
