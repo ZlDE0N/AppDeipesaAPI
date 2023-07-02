@@ -16,6 +16,7 @@ namespace AppDeipesaAPI.Models
         {
         }
 
+        public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<Proforma> Proformas => Set<Proforma>();
         public virtual DbSet<Contrato> Contratos => Set<Contrato>();
         public virtual DbSet<Ciudad> Ciudades => Set<Ciudad>();
@@ -52,6 +53,17 @@ namespace AppDeipesaAPI.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>(u =>
+            {
+                u.HasKey(u => u.Id);
+
+                u.HasIndex(u => u.Username)
+                    .IsUnique();
+
+                u.HasIndex(u => u.Email)
+                    .IsUnique();
+            });
+
             modelBuilder.Entity<Almacen>(entity =>
             {
                 entity.HasKey(e => e.IdAlmacen)

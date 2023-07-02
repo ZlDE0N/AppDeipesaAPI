@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AppDeipesaAPI.Models.Dtos.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Validations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -12,48 +11,62 @@ namespace AppDeipesaAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public static User user = new User();
         private readonly IConfiguration _configuration;
+        private readonly InventarioDeipesaContext _context;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, InventarioDeipesaContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto request)
+        public async Task<ActionResult<User>> Register(RegisterDto request)
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            user.Username = request.Username;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            var user = new User
+            {
+                Name = request.Name,
+                Email = request.Email,
+                Username = request.Username,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
 
-            return Ok(user);
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
+        public async Task<ActionResult<TokenDto>> Login(LoginDto request)
         {
-            if(user.Username != request.Username)
+            var user = await _context.Users
+                .Where(x => x.Username == request.Username)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
             {
-                return BadRequest("User not found.");
+                return NotFound();
             }
 
-            if(!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
-                return BadRequest("Wrong password.");
+                return Unauthorized();
             }
 
             string token = CreateToken(user);
-            return Ok(token);
+            return new TokenDto { Token = token };
         }
 
-        private string  CreateToken(User user)
+        private string CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>
+            List<Claim> claims = new()
             {
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim("username", user.Username),
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -65,14 +78,14 @@ namespace AppDeipesaAPI.Controllers
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds);
-            
+
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
         }
 
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt) 
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
             {
@@ -83,12 +96,23 @@ namespace AppDeipesaAPI.Controllers
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new HMACSHA512(user.PasswordSalt))
+            using (var hmac = new HMACSHA512(passwordSalt))
             {
                 var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computeHash.SequenceEqual(passwordHash);
             }
         }
 
+        [HttpGet("check-username/{username}")]
+        public bool IsUsernameAvailable(string username)
+        {
+            return !_context.Users.Any(x => x.Username == username);
+        }
+
+        [HttpGet("check-email/{email}")]
+        public bool IsEmailAvailable(string email)
+        {
+            return !_context.Users.Any(x => x.Email == email);
+        }
     }
 }
