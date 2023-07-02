@@ -11,6 +11,7 @@ namespace AppDeipesaAPI.Models
         public string ClienteId { get; set; } = null!;
         public string Nombre { get; set; } = null!;
         public string NombreAcordado { get; set; } = null!;
+        public string URL { get; set; } = null!;
 
         [Column(TypeName = "DATE")]
         public DateTime Fecha { get; set; }
