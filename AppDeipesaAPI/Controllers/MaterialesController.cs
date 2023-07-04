@@ -93,6 +93,11 @@ namespace AppDeipesaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Materiale>> PostMateriale(Materiale materiale)
         {
+            if (IsDuplicated(materiale))
+            {
+                return Conflict();
+            }
+
             if (_context.Materiales == null)
             {
                 return Problem("Entity set 'InventarioDeipesaContext.Materiales'  is null.");
@@ -140,6 +145,16 @@ namespace AppDeipesaAPI.Controllers
         private bool MaterialeExists(string id)
         {
             return (_context.Materiales?.Any(e => e.IdMaterial == id)).GetValueOrDefault();
+        }
+
+        [HttpPost("check-duplicity")]
+        public bool IsDuplicated(Materiale materiale)
+        {
+            return _context.Materiales.Any(mat => mat.NombreMaterial == materiale.NombreMaterial
+                && mat.UnidadDeMedida == materiale.UnidadDeMedida
+                && mat.Marca == materiale.Marca
+                && mat.Pvu == materiale.Pvu
+                && mat.Descripcion == materiale.Descripcion);
         }
     }
 }
