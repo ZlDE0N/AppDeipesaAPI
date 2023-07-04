@@ -150,11 +150,13 @@ namespace AppDeipesaAPI.Controllers
         [HttpPost("check-duplicity")]
         public bool IsDuplicated(Materiale materiale)
         {
-            return _context.Materiales.Any(mat => mat.NombreMaterial == materiale.NombreMaterial
-                && mat.UnidadDeMedida == materiale.UnidadDeMedida
-                && mat.Marca == materiale.Marca
+            // Really ugly expression due to nullable fields
+            return _context.Materiales.Any(mat =>
+                ((mat.NombreMaterial != null) ? mat.NombreMaterial.ToLower() : null) == ((materiale.NombreMaterial != null) ? materiale.NombreMaterial.ToLower() : null)
+                && ((mat.UnidadDeMedida != null) ? mat.UnidadDeMedida.ToLower() : null) == ((materiale.UnidadDeMedida != null) ? materiale.UnidadDeMedida.ToLower() : null)
+                && ((mat.Descripcion != null) ? mat.Descripcion.ToLower() : null) == ((materiale.Descripcion != null) ? materiale.Descripcion.ToLower() : null)
                 && mat.Pvu == materiale.Pvu
-                && mat.Descripcion == materiale.Descripcion);
+                && ((mat.Marca != null) ? mat.Marca.ToLower() : null) == ((materiale.Marca != null) ? materiale.Marca.ToLower() : null));
         }
     }
 }
