@@ -11,7 +11,7 @@ namespace AppDeipesaAPI.Models
         }
 
         public string IdFactura { get; set; } = null!;
-        public string? IdCliente { get; set; }
+        public string IdCliente { get; set; }
         public DateTime? FechaFactura { get; set; }
         public double? Impuesto { get; set; }
         public double? Descuento { get; set; }

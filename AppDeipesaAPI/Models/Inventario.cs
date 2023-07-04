@@ -7,7 +7,7 @@ namespace AppDeipesaAPI.Models
     {
         public string IdInventario { get; set; } = null!;
         public string? IdAlmacen { get; set; }
-        public string? IdMaterial { get; set; }
+        public string IdMaterial { get; set; } = null!;
         public string? Cantidad { get; set; }
         public string? TipoInventario { get; set; }
         public string? StockMinimo { get; set; }

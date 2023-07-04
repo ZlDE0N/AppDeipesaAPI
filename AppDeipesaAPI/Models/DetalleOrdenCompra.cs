@@ -8,7 +8,7 @@ namespace AppDeipesaAPI.Models
     {
         public string IdDetalleOrdenCompra { get; set; } = null!;
         public string? IdOrdenCompra { get; set; }
-        public string? IdMaterial { get; set; }
+        public string IdMaterial { get; set; } = null!;
         public DateTime? FechaFabricacion { get; set; }
         public string? Cantidad { get; set; }
         public double? Pvu { get; set; }

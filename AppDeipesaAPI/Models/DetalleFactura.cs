@@ -7,7 +7,7 @@ namespace AppDeipesaAPI.Models
     {
         public string IdDetalleFactura { get; set; } = null!;
         public string? IdFactura { get; set; }
-        public string? IdMaterial { get; set; }
+        public string IdMaterial { get; set; } = null!;
         public string? Cantidad { get; set; }
         public double? SubTotal { get; set; }
 

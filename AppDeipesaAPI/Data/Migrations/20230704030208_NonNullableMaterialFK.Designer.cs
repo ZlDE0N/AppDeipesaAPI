@@ -4,6 +4,7 @@ using AppDeipesaAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppDeipesaAPI.Data.Migrations
 {
     [DbContext(typeof(InventarioDeipesaContext))]
-    partial class InventarioDeipesaContextModelSnapshot : ModelSnapshot
+    [Migration("20230704030208_NonNullableMaterialFK")]
+    partial class NonNullableMaterialFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,7 +315,6 @@ namespace AppDeipesaAPI.Data.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("IdCliente")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
@@ -609,7 +610,6 @@ namespace AppDeipesaAPI.Data.Migrations
                         .HasColumnType("varchar(120)");
 
                     b.Property<string>("IdCliente")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
@@ -920,8 +920,6 @@ namespace AppDeipesaAPI.Data.Migrations
                     b.HasOne("AppDeipesaAPI.Models.Cliente", "IdClienteNavigation")
                         .WithMany("Facturas")
                         .HasForeignKey("IdCliente")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_IdCliente");
 
                     b.Navigation("IdClienteNavigation");
@@ -961,8 +959,6 @@ namespace AppDeipesaAPI.Data.Migrations
                     b.HasOne("AppDeipesaAPI.Models.Cliente", "IdClienteNavigation")
                         .WithMany("Pagos")
                         .HasForeignKey("IdCliente")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FKIdCliente");
 
                     b.HasOne("AppDeipesaAPI.Models.TipoPago", "IdTipoPagosNavigation")
